@@ -1,0 +1,176 @@
+-- DROP SCHEMA demo1411;
+
+CREATE SCHEMA demo1411 AUTHORIZATION user11019;
+-- demo1411.categ определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.categ;
+
+CREATE TABLE demo1411.categ (
+	id_categ int8 NOT NULL,
+	categ varchar NULL,
+	CONSTRAINT categ_pk PRIMARY KEY (id_categ)
+);
+
+
+-- demo1411.cust определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.cust;
+
+CREATE TABLE demo1411.cust (
+	id_cust int8 NOT NULL,
+	cust varchar NULL,
+	CONSTRAINT cust_pk PRIMARY KEY (id_cust)
+);
+
+
+-- demo1411.ed_izm определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.ed_izm;
+
+CREATE TABLE demo1411.ed_izm (
+	id_ed_izm int8 NOT NULL,
+	ed_izm varchar NULL,
+	CONSTRAINT ed_izm_pk PRIMARY KEY (id_ed_izm)
+);
+
+
+-- demo1411.manuf определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.manuf;
+
+CREATE TABLE demo1411.manuf (
+	id_manuf int8 NOT NULL,
+	manuf varchar NULL,
+	CONSTRAINT manuf_pk PRIMARY KEY (id_manuf)
+);
+
+
+-- demo1411.punkt определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.punkt;
+
+CREATE TABLE demo1411.punkt (
+	id_punkt int8 NOT NULL,
+	punkt varchar NULL,
+	CONSTRAINT punkt_pk PRIMARY KEY (id_punkt)
+);
+
+
+-- demo1411.roles определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.roles;
+
+CREATE TABLE demo1411.roles (
+	id_role int8 NOT NULL,
+	"role" varchar NULL,
+	CONSTRAINT roles_pk PRIMARY KEY (id_role)
+);
+
+
+-- demo1411.status определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.status;
+
+CREATE TABLE demo1411.status (
+	id_status int8 NOT NULL,
+	status varchar NULL,
+	CONSTRAINT status_pk PRIMARY KEY (id_status)
+);
+
+
+-- demo1411.client определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.client;
+
+CREATE TABLE demo1411.client (
+	id_client int8 NOT NULL,
+	surname varchar NULL,
+	"name" varchar NULL,
+	lastname varchar NULL,
+	login varchar NULL,
+	passwd varchar NULL,
+	id_role int8 NULL,
+	CONSTRAINT client_pk PRIMARY KEY (id_client),
+	CONSTRAINT client_roles_fk FOREIGN KEY (id_role) REFERENCES demo1411.roles(id_role)
+);
+
+
+-- demo1411.prod определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.prod;
+
+CREATE TABLE demo1411.prod (
+	id_prod int8 NOT NULL,
+	articul varchar NULL,
+	"name" varchar NULL,
+	id_ed_izm int8 NULL,
+	"cost" int8 NULL,
+	max_disc float4 NULL,
+	id_man int8 NULL,
+	id_cust int8 NULL,
+	id_categ int8 NULL,
+	curr_disc float4 NULL,
+	quan_skl int8 NULL,
+	descr varchar NULL,
+	image varchar NULL,
+	CONSTRAINT prod_pk PRIMARY KEY (id_prod),
+	CONSTRAINT prod_categ_fk FOREIGN KEY (id_categ) REFERENCES demo1411.categ(id_categ),
+	CONSTRAINT prod_cust_fk FOREIGN KEY (id_cust) REFERENCES demo1411.cust(id_cust),
+	CONSTRAINT prod_ed_izm_fk FOREIGN KEY (id_ed_izm) REFERENCES demo1411.ed_izm(id_ed_izm),
+	CONSTRAINT prod_manuf_fk FOREIGN KEY (id_man) REFERENCES demo1411.manuf(id_manuf)
+);
+
+
+-- demo1411.zakaz определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.zakaz;
+
+CREATE TABLE demo1411.zakaz (
+	id_zakaz int8 NOT NULL,
+	date_cr date NULL,
+	dete_deliv date NULL,
+	id_punkt int8 NULL,
+	id_client int8 NULL,
+	code int8 NULL,
+	id_stat int8 NULL,
+	CONSTRAINT zakaz_pk PRIMARY KEY (id_zakaz),
+	CONSTRAINT zakaz_client_fk FOREIGN KEY (id_client) REFERENCES demo1411.client(id_client),
+	CONSTRAINT zakaz_punkt_fk FOREIGN KEY (id_punkt) REFERENCES demo1411.punkt(id_punkt),
+	CONSTRAINT zakaz_status_fk FOREIGN KEY (id_stat) REFERENCES demo1411.status(id_status)
+);
+
+
+-- demo1411.zakaz_pr определение
+
+-- Drop table
+
+-- DROP TABLE demo1411.zakaz_pr;
+
+CREATE TABLE demo1411.zakaz_pr (
+	id_zakaz int8 NOT NULL,
+	id_prod int8 NOT NULL,
+	amount int8 NULL,
+	CONSTRAINT zakaz_pr_pk PRIMARY KEY (id_zakaz, id_prod),
+	CONSTRAINT zakaz_pr_prod_fk FOREIGN KEY (id_prod) REFERENCES demo1411.prod(id_prod),
+	CONSTRAINT zakaz_pr_zakaz_fk FOREIGN KEY (id_zakaz) REFERENCES demo1411.zakaz(id_zakaz)
+);
